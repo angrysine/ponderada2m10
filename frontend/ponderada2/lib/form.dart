@@ -1,29 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:ponderada2/task.dart';
 
-class FormLogin extends StatefulWidget {
-  const FormLogin({super.key});
+class LoginSingupForm extends StatefulWidget {
+  const LoginSingupForm({
+    super.key,
+    required this.buttonCallback,
+    required this.firstController,
+    required this.secondController,
+    required this.title,
+    required this.firstText,
+    required this.secondText,
+    required this.buttonText,
+  });
+
+  final Function buttonCallback;
+  final TextEditingController firstController;
+  final TextEditingController secondController;
+  final String firstText;
+  final String secondText;
+  final String buttonText;
+  final String title;
 
   @override
-  State<FormLogin> createState() => _FormLoginState();
+  State<LoginSingupForm> createState() => _LoginSingupFormState();
 }
 
-class _FormLoginState extends State<FormLogin> {
-  @override
+class _LoginSingupFormState extends State<LoginSingupForm> {
   final _formKey = GlobalKey<FormState>();
   double formPadding = 16;
   double formPaddingVertical = 16;
   bool _passwordVisible = false;
-  final _nameController = TextEditingController();
-  final _passwordController = TextEditingController();
 
-  void printController() {
-    print(_nameController.text);
-    print(_passwordController.text);
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const TaskMainPage()));
-  }
+  // void printController() {
+  //   print(_nameController.text);
+  //   print(_passwordController.text);
+  //   Navigator.push(
+  //       context, MaterialPageRoute(builder: (context) => const TaskMainPage()));
+  // }
 
+  @override
   Widget build(BuildContext context) {
     return Form(
         key: _formKey,
@@ -32,16 +46,17 @@ class _FormLoginState extends State<FormLogin> {
             Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: formPadding, vertical: formPaddingVertical),
-              child: const Text(
-                "Titulo",
-                style: TextStyle(height: 3, fontSize: 20),
+              child: Text(
+                widget.title,
+                style: const TextStyle(height: 3, fontSize: 20),
               ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: formPadding, vertical: formPaddingVertical),
               child: NameInput(
-                nameController: _nameController,
+                nameController: widget.firstController,
+                labelText: widget.firstText,
               ),
             ),
             Padding(
@@ -56,7 +71,7 @@ class _FormLoginState extends State<FormLogin> {
                   return null;
                 },
                 decoration: InputDecoration(
-                    labelText: 'descrição',
+                    labelText: widget.secondText,
                     border: const OutlineInputBorder(),
                     prefixIcon: const Icon(Icons.lock),
                     suffixIcon: IconButton(
@@ -68,12 +83,12 @@ class _FormLoginState extends State<FormLogin> {
                       },
                     )),
                 obscureText: !_passwordVisible,
-                controller: _passwordController,
+                controller: widget.secondController,
               ),
             ),
             LoginButton(
               formKey: _formKey,
-              pressed: printController,
+              pressed: widget.buttonCallback,
             ),
           ],
         ));
@@ -112,8 +127,10 @@ class NameInput extends StatelessWidget {
   const NameInput({
     super.key,
     required TextEditingController nameController,
+    required this.labelText,
   }) : _nameController = nameController;
   final TextEditingController _nameController;
+  final String labelText;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -124,8 +141,8 @@ class NameInput extends StatelessWidget {
 
         return null;
       },
-      decoration: const InputDecoration(
-          labelText: 'Nome', border: OutlineInputBorder()),
+      decoration: InputDecoration(
+          labelText: labelText, border: const   OutlineInputBorder()),
       controller: _nameController,
     );
   }

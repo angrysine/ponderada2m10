@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:ponderada2/form.dart";
 import "package:ponderada2/login.dart";
 import "package:ponderada2/signup.dart";
 
@@ -29,7 +30,27 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   int currentPage = 0;
-  List<Widget> pages = const [FormSignUp(), FormLogin()];
+  final singupNameController = TextEditingController();
+  final singupPasswordController = TextEditingController();
+  late LoginSingupForm singupForm;
+  late List<Widget> pages;
+  @override
+  void initState() {
+    super.initState();
+
+    singupForm = LoginSingupForm(
+        buttonCallback: () {
+          print("oi");
+        },
+        firstController: singupNameController,
+        secondController: singupPasswordController,
+        title: "Criar usuário",
+        firstText: "Nome",
+        secondText: "Senha",
+        buttonText: "Criar");
+    pages = [const FormSignUp(), const FormLogin(), singupForm];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
