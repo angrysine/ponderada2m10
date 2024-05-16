@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:ponderada2/form.dart";
-import "package:ponderada2/login.dart";
-import "package:ponderada2/signup.dart";
+import "package:ponderada2/functions.dart";
 
 void main() {
   runApp(const MyApp());
@@ -32,6 +31,9 @@ class HomePageState extends State<HomePage> {
   int currentPage = 0;
   final singupNameController = TextEditingController();
   final singupPasswordController = TextEditingController();
+  final loginNameController = TextEditingController();
+  final loginPasswordController = TextEditingController();
+  late LoginSingupForm loginForm;
   late LoginSingupForm singupForm;
   late List<Widget> pages;
   @override
@@ -39,8 +41,9 @@ class HomePageState extends State<HomePage> {
     super.initState();
 
     singupForm = LoginSingupForm(
-        buttonCallback: () {
-          print("oi");
+        buttonCallback:  ()async {
+          var response = await createUser(singupNameController.text, singupPasswordController.text);
+          print(response.body);
         },
         firstController: singupNameController,
         secondController: singupPasswordController,
@@ -48,7 +51,22 @@ class HomePageState extends State<HomePage> {
         firstText: "Nome",
         secondText: "Senha",
         buttonText: "Criar");
-    pages = [const FormSignUp(), const FormLogin(), singupForm];
+    loginForm = LoginSingupForm(
+        buttonCallback: () async {
+          var response = await login(loginNameController.text, loginPasswordController.text);
+          print(response.body);
+          print("oi");
+        },
+        firstController: loginNameController,
+        secondController: loginPasswordController,
+        title: "Login",
+        firstText: "Nome",
+        secondText: "Senha",
+        buttonText: "Logar");
+    pages = [
+      singupForm,
+      loginForm,
+    ];
   }
 
   @override

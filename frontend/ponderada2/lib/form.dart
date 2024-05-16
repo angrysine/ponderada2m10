@@ -27,7 +27,7 @@ class LoginSingupForm extends StatefulWidget {
 class _LoginSingupFormState extends State<LoginSingupForm> {
   final _formKey = GlobalKey<FormState>();
   double formPadding = 16;
-  double formPaddingVertical = 16;
+  double formPaddingVertical = 16;  
   bool _passwordVisible = false;
 
   // void printController() {
@@ -89,6 +89,7 @@ class _LoginSingupFormState extends State<LoginSingupForm> {
             LoginButton(
               formKey: _formKey,
               pressed: widget.buttonCallback,
+              buttonText: widget.buttonText,
             ),
           ],
         ));
@@ -100,11 +101,14 @@ class LoginButton extends StatelessWidget {
     super.key,
     required GlobalKey<FormState> formKey,
     required Function pressed,
+    required String buttonText,
   })  : _formKey = formKey,
-        _pressed = pressed;
+        _pressed = pressed,
+        button = buttonText;
 
   final GlobalKey<FormState> _formKey;
   final Function _pressed;
+  final String button;
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +122,7 @@ class LoginButton extends StatelessWidget {
           );
         }
       },
-      child: const Text('Criar task'),
+      child: Text(button),
     );
   }
 }
@@ -142,7 +146,7 @@ class NameInput extends StatelessWidget {
         return null;
       },
       decoration: InputDecoration(
-          labelText: labelText, border: const   OutlineInputBorder()),
+          labelText: labelText, border: const OutlineInputBorder()),
       controller: _nameController,
     );
   }
