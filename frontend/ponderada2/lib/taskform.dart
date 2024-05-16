@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-class LoginSingupForm extends StatefulWidget {
-  const LoginSingupForm({
+class CreateTaskForm extends StatefulWidget {
+  const CreateTaskForm({
     super.key,
     required this.buttonCallback,
     required this.firstController,
@@ -24,14 +23,13 @@ class LoginSingupForm extends StatefulWidget {
   final String pressedSuccessText;
 
   @override
-  State<LoginSingupForm> createState() => _LoginSingupFormState();
+  State<CreateTaskForm> createState() => _CreateTaskFormState();
 }
 
-class _LoginSingupFormState extends State<LoginSingupForm> {
+class _CreateTaskFormState extends State<CreateTaskForm> {
   final _formKey = GlobalKey<FormState>();
   double formPadding = 16;
   double formPaddingVertical = 16;
-  bool _passwordVisible = false;
 
   // void printController() {
   //   print(_nameController.text);
@@ -57,7 +55,7 @@ class _LoginSingupFormState extends State<LoginSingupForm> {
             Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: formPadding, vertical: formPaddingVertical),
-              child: NameInput(
+              child: FirstInput(
                 nameController: widget.firstController,
                 labelText: widget.firstText,
               ),
@@ -73,23 +71,14 @@ class _LoginSingupFormState extends State<LoginSingupForm> {
 
                   return null;
                 },
-                decoration: InputDecoration(
-                    labelText: widget.secondText,
-                    border: const OutlineInputBorder(),
-                    prefixIcon: const Icon(Icons.lock),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.remove_red_eye_outlined),
-                      onPressed: () {
-                        setState(() {
-                          _passwordVisible = !_passwordVisible;
-                        });
-                      },
-                    )),
-                obscureText: !_passwordVisible,
                 controller: widget.secondController,
+                decoration: InputDecoration(
+                  labelText: widget.secondText,
+                  border: const OutlineInputBorder(),
+                ),
               ),
             ),
-            LoginButton(
+            ActionButtonForm(
               formKey: _formKey,
               pressed: widget.buttonCallback,
               buttonText: widget.buttonText,
@@ -100,8 +89,8 @@ class _LoginSingupFormState extends State<LoginSingupForm> {
   }
 }
 
-class LoginButton extends StatelessWidget {
-  const LoginButton({
+class ActionButtonForm extends StatelessWidget {
+  const ActionButtonForm({
     super.key,
     required GlobalKey<FormState> formKey,
     required Function pressed,
@@ -116,7 +105,6 @@ class LoginButton extends StatelessWidget {
   final Function _pressed;
   final String button;
   final String _pressedSuccessText;
-
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -134,13 +122,14 @@ class LoginButton extends StatelessWidget {
   }
 }
 
-class NameInput extends StatelessWidget {
-  const NameInput({
+class FirstInput extends StatelessWidget {
+  const FirstInput({
     super.key,
     required TextEditingController nameController,
     required this.labelText,
   }) : _nameController = nameController;
   final TextEditingController _nameController;
+
   final String labelText;
   @override
   Widget build(BuildContext context) {

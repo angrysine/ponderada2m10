@@ -1,6 +1,9 @@
+import "dart:convert";
+
 import "package:flutter/material.dart";
 import "package:ponderada2/form.dart";
 import "package:ponderada2/functions.dart";
+import "package:ponderada2/task.dart";
 
 void main() {
   runApp(const MyApp());
@@ -41,8 +44,15 @@ class HomePageState extends State<HomePage> {
     super.initState();
 
     singupForm = LoginSingupForm(
-        buttonCallback:  ()async {
-          var response = await createUser(singupNameController.text, singupPasswordController.text);
+        buttonCallback: () async {
+          var response = await createUser(
+              singupNameController.text, singupPasswordController.text);
+          var status = json.decode(response.body)['status'];
+          if (status == "success creating user ${singupNameController.text})") {
+            print("Usuário criado com sucesso");
+          } else {
+            print("Erro ao criar usuário");
+          }
           print(response.body);
         },
         firstController: singupNameController,
@@ -50,19 +60,28 @@ class HomePageState extends State<HomePage> {
         title: "Criar usuário",
         firstText: "Nome",
         secondText: "Senha",
-        buttonText: "Criar");
+        buttonText: "Criar",
+        pressedSuccessText: "Usuário criado com sucesso.");
     loginForm = LoginSingupForm(
-        buttonCallback: () async {
-          var response = await login(loginNameController.text, loginPasswordController.text);
-          print(response.body);
-          print("oi");
-        },
-        firstController: loginNameController,
-        secondController: loginPasswordController,
-        title: "Login",
-        firstText: "Nome",
-        secondText: "Senha",
-        buttonText: "Logar");
+      buttonCallback: () async {
+        var response =
+            await login(loginNameController.text, loginPasswordController.text);
+
+        var token = getToken(response);
+        saveToken(token);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const TaskPage()),
+        );
+      },  
+      firstController: loginNameController,
+      secondController: loginPasswordController,
+      title: "Login",
+      firstText: "Nome",
+      secondText: "Senha",
+      buttonText: "Logar",
+      pressedSuccessText: "Login teve sucesso. Redirecionando",
+    );
     pages = [
       singupForm,
       loginForm,
@@ -76,13 +95,6 @@ class HomePageState extends State<HomePage> {
         title: const Text("Ponderada 2"),
         backgroundColor: Colors.lightBlue,
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     debugPrint("Botão pressionado");
-      //   },
-      //   backgroundColor: Colors.lightBlue,
-      //   child: const Icon(Icons.add),
-      // ),
       bottomNavigationBar: NavigationBar(
         destinations: const [
           NavigationDestination(icon: Icon(Icons.add), label: "Criar usuário"),
