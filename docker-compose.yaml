@@ -1,10 +1,6 @@
 version: '3.8'
 services:
-  api-synchronous-service:
-    build: ./syncronousApi/
-    ports:
-      - "5000:5000"
   api-asynchronous-service:
-    build: ./asyncrhonousApi/
+    build: ./asynchronousApi/
     ports:
       - "5001:5001"
